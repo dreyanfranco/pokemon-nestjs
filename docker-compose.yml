@@ -1,0 +1,33 @@
+version: '3'
+services:
+  client:
+    image: node:14-alpine
+    stdin_open: true
+    ports:
+      - 3000:3000
+    volumes:
+      - ./pokemon-client:/app
+    working_dir: /app
+    command: npm start
+    
+  server:
+    image: node:14-alpine
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo
+    volumes:
+      - ./server-nestjs:/app
+    working_dir: /app
+    command: npm run start
+
+  
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+      # - ./data:/db -> escoge directorio 
+
+volumes:
+  mongo-data:
+    driver: local
